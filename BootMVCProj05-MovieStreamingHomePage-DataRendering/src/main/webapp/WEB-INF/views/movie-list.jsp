@@ -13,7 +13,7 @@
 
 <c:forEach var="movie" items="${movies}">
     <c:if test="${movie.rating >= 8}">
-        ${movie.title} | ${movie.genre} | ${movie.rating} | ${movie.language}
+        <b>${movie.title} | ${movie.genre} | ${movie.rating} | ${movie.language}</b>
         <br/>
     </c:if>
 </c:forEach>
