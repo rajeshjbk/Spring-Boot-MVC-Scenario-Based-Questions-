@@ -14,6 +14,7 @@
 				<th>Fee</th>
 				<th>Marks</th>
 				<th>Result</th>
+				<th>Operations</th>
 			</tr>
 			<c:forEach var="vo" items="${listVO}">
 				<tr>
@@ -24,6 +25,10 @@
 					<td>${vo.fee}</td>
 					<td>${vo.marks}</td>
 					<td>${vo.result}</td>
+					<td><a href="edit?no=${vo.id }"><img src="images/update.jpg" width="30" height="30"></a>
+					    &nbsp; &nbsp;
+					    <a href="delete?no=${vo.id }" onclick="return confirm('Are You sure to Delete?')"><img src="images/delete.jpg" width="30" height="30"></a>
+					</td>
 				</tr>
 			</c:forEach>
 		</table>

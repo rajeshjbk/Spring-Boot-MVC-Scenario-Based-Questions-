@@ -3,11 +3,13 @@ package com.raj.controller;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.raj.model.StudentVO;
@@ -20,7 +22,7 @@ public class StudentOperationsController {
 
 	@Autowired
 	private IStudentMgmtService studentService;
-	
+
 	@GetMapping("/")
 	public String showHome() {
 
@@ -33,10 +35,10 @@ public class StudentOperationsController {
 
 		//use service
 		List<StudentVO> listVO = studentService.showAllStudents();
-		
+
 		//keep the result in model attribute
 		map.put("listVO", listVO);
-		
+
 		//return LVN
 		return "show-report";
 	}
@@ -51,42 +53,81 @@ public class StudentOperationsController {
 
 	/*@PostMapping("/add")
 	public String saveStudent(@ModelAttribute("stuVO") StudentVO vo, Map<String, Object> map) {
-	
+
 		//use service
 		String result = studentService.saveStudent(vo);
-		
+
 		//keep result as model attribute
 		map.put("resultMsg", result);
-		
+
 		//return LVN
 		return "redirect:report";
 	}*/
-	
-		
+
+
 	/*@PostMapping("/add")
 	public String saveStudent(@ModelAttribute("stuVO") StudentVO vo, RedirectAttributes attrs) {
-	
+
 		//use service
 		String result = studentService.saveStudent(vo);
-		
+
 		//keep result as model attribute
 		attrs.addFlashAttribute("resultMsg", result);
-		
+
 		//return LVN
 		return "redirect:report";
 	}*/
-	
+
 	@PostMapping("/add")
 	public String saveStudent(@ModelAttribute("stuVO") StudentVO vo, HttpSession ses) {
-	
+
 		//use service
 		String result = studentService.saveStudent(vo);
-		
+
 		//keep result as model attribute
 		ses.setAttribute("resultMsg", result);
-		
+
 		//return LVN
 		return "redirect:report";
 	}
 
+	@GetMapping("/edit")
+	public String showEditStudentFormPage(@ModelAttribute("stuVO") StudentVO vo,
+			@RequestParam Long no) {
+
+		//use the service
+		StudentVO vo1 = studentService.showStudentById(no);
+		//copy vo1 object data to vo
+
+		BeanUtils.copyProperties(vo1, vo);
+
+		return "student-edit-form";
+	}
+
+	@PostMapping("/edit")
+	public String showStudent(@ModelAttribute("stuVO") StudentVO vo,
+			RedirectAttributes attrs) {
+
+		//use the service
+		String msg = studentService.editStudent(vo);
+
+		//add the flash attributes
+		attrs.addFlashAttribute("resultMsg",msg);
+
+		//redirect the request
+		return "redirect:report";
+	}
+	
+	@GetMapping("/delete")
+	public String deleteStudent(@RequestParam("no")long no, Map<String,Object> map) {
+
+		//use service
+		String msg = studentService.deleteStudent(no);
+
+		//keep the message in model attribute
+		map.put("resultMsg", msg);
+
+		//redirect the request
+		return "forward:report";
+	}
 }

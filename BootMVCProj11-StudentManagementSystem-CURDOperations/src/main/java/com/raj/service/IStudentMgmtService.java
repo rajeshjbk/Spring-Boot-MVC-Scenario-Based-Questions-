@@ -9,4 +9,11 @@ public interface IStudentMgmtService {
 	String saveStudent(StudentVO vo);
 	
 	List<StudentVO> showAllStudents();
+	
+	StudentVO showStudentById(long id);
+	
+	String editStudent(StudentVO vo);
+	
+	String deleteStudent(long id);
+	
 }
